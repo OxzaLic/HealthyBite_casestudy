@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>โปรไฟล์สุขภาพ | HealthyBite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="profile" class="flex justify-center min-h-screen bg-gray-100 text-gray-800">
+
+  <div class="w-full max-w-md bg-[#F8FAF8] min-h-screen shadow-2xl relative flex flex-col overflow-x-hidden pb-24">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-30 px-5 py-3.5 flex items-center justify-between border-b border-gray-100">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm">
+          <i data-lucide="leaf" class="w-5 h-5"></i>
+        </div>
+        <span class="font-bold text-lg text-gray-900 tracking-tight">Healthy<span class="text-emerald-600">Bite</span></span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <span class="text-xs font-medium bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full border border-emerald-100">
+          เป้าหมาย: <span id="header-target">1,800</span> kcal
+        </span>
+        <button onclick="switchTab('profile')" class="w-8 h-8 rounded-full overflow-hidden border border-emerald-200 shrink-0">
+          <img id="header-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Avatar" class="w-full h-full object-cover">
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 px-5 pt-4">
+      <section id="page-profile" class="page-section fade-in space-y-5">
+        <div>
+          <h1 class="text-xl font-bold text-gray-900">โปรไฟล์ & ข้อมูลสุขภาพ</h1>
+          <p class="text-xs text-gray-500">ดูข้อมูลสุขภาพของคุณ และกดแก้ไขเมื่อต้องการเปลี่ยนข้อมูล</p>
+        </div>
+
+        <!-- Profile Header & Avatar Upload Card -->
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 flex flex-col items-center text-center relative">
+          <input type="file" id="profile-avatar-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
+          
+          <div id="profile-avatar-control" class="relative group pointer-events-none" onclick="openAvatarPicker()" aria-disabled="true">
+            <img id="profile-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Profile Avatar" class="w-24 h-24 rounded-full object-cover border-4 border-emerald-100 shadow-md">
+            <div id="profile-avatar-camera" class="hidden absolute bottom-0 right-0 w-8 h-8 bg-emerald-600 text-white rounded-full items-center justify-center shadow-md border-2 border-white">
+              <i data-lucide="camera" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <h2 id="profile-display-name" class="font-bold text-lg text-gray-900 mt-3">วี่ (Vee)</h2>
+          <p id="profile-display-bio" class="text-xs text-gray-500 mt-0.5">เป้าหมาย: รักษาน้ำหนัก • BMI <span id="profile-bmi-val" class="font-bold text-emerald-600">21.0</span> (<span id="profile-bmi-status">สมส่วน</span>)</p>
+
+          <!-- Quick Body Stats -->
+          <div class="grid grid-cols-3 gap-2 w-full mt-4 pt-4 border-t border-gray-100 text-xs">
+            <div class="bg-gray-50 py-2 rounded-xl">
+              <span class="text-gray-400 block text-[10px]">อายุ</span>
+              <span class="font-bold text-gray-800"><span id="stat-age">26</span> ปี</span>
+            </div>
+            <div class="bg-gray-50 py-2 rounded-xl">
+              <span class="text-gray-400 block text-[10px]">น้ำหนัก</span>
+              <span class="font-bold text-gray-800"><span id="stat-weight">55</span> kg</span>
+            </div>
+            <div class="bg-gray-50 py-2 rounded-xl">
+              <span class="text-gray-400 block text-[10px]">ส่วนสูง</span>
+              <span class="font-bold text-gray-800"><span id="stat-height">162</span> cm</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Info Form -->
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="font-bold text-sm text-gray-900 flex items-center gap-2">
+              <i data-lucide="user-cog" class="w-4 h-4 text-emerald-600"></i> ข้อมูลส่วนตัว
+            </h2>
+            <span id="profile-edit-hint" class="text-[10px] text-gray-500 text-right ml-3">ข้อมูลนี้ใช้คำนวณเป้าหมายแคลอรีและช่วยปรับคำแนะนำอาหาร</span>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div>
+              <label class="text-gray-500 block mb-1">ชื่อ</label>
+              <input type="text" id="prof-name" value="วี่ (Vee)" placeholder="กรอกชื่อของคุณ" disabled class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 disabled:opacity-70 disabled:cursor-not-allowed">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-gray-500 block mb-1">เพศ</label>
+                <select id="prof-gender" disabled class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-emerald-500 disabled:opacity-70 disabled:cursor-not-allowed">
+                  <option value="female" selected>หญิง</option>
+                  <option value="male">ชาย</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-gray-500 block mb-1">อายุ (ปี)</label>
+                <input type="number" id="prof-age" value="26" disabled class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 disabled:opacity-70 disabled:cursor-not-allowed">
+              </div>
+              <div>
+                <label class="text-gray-500 block mb-1">น้ำหนัก (kg)</label>
+                <input type="number" id="prof-weight" value="55" step="0.1" disabled class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 disabled:opacity-70 disabled:cursor-not-allowed">
+              </div>
+              <div>
+                <label class="text-gray-500 block mb-1">ส่วนสูง (cm)</label>
+                <input type="number" id="prof-height" value="162" disabled class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 disabled:opacity-70 disabled:cursor-not-allowed">
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-500 block mb-1">เป้าหมายสุขภาพ</label>
+              <select id="prof-goal" disabled class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 focus:outline-none focus:border-emerald-500 disabled:opacity-70 disabled:cursor-not-allowed">
+                <option value="-400">ลดน้ำหนัก (-400 kcal/วัน)</option>
+                <option value="0" selected>รักษาน้ำหนักปัจจุบัน</option>
+                <option value="300">เพิ่มกล้ามเนื้อ (+300 kcal/วัน)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-gray-500 block mb-1">อาหารที่แพ้ / ข้อจำกัดทางอาหาร</label>
+              <input type="text" id="prof-allergy" placeholder="เช่น แพ้อาหารทะเล, นมวัว, ถั่วลิสง (ถ้าไม่มีเว้นว่างได้)" disabled class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 disabled:opacity-70 disabled:cursor-not-allowed">
+            </div>
+
+            <div>
+              <label class="text-gray-500 block mb-1">โรคประจำตัวหรือข้อมูลสุขภาพที่ควรระวัง</label>
+              <input type="text" id="prof-condition" placeholder="เช่น ความดันโลหิตสูง, เบาหวาน (ถ้าไม่มีเว้นว่างได้)" disabled class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-emerald-500 disabled:opacity-70 disabled:cursor-not-allowed">
+            </div>
+          </div>
+
+          <button id="profile-edit-button" onclick="beginProfileEdit()" class="w-full bg-white border border-emerald-600 text-emerald-700 text-xs font-semibold py-3 rounded-xl hover:bg-emerald-50 transition shadow-sm flex items-center justify-center gap-1.5">
+            <i data-lucide="pencil" class="w-4 h-4"></i> แก้ไขข้อมูลส่วนตัว
+          </button>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="profile-cancel-button" onclick="cancelProfileEdit()" class="hidden w-full bg-gray-100 text-gray-700 text-xs font-semibold py-3 rounded-xl hover:bg-gray-200 transition">
+              ยกเลิก
+            </button>
+            <button id="profile-save-button" onclick="saveProfile()" class="hidden w-full bg-emerald-600 text-white text-xs font-semibold py-3 rounded-xl hover:bg-emerald-700 transition shadow-sm flex items-center justify-center gap-1.5">
+            <i data-lucide="save" class="w-4 h-4"></i> บันทึกข้อมูลส่วนตัว & คำนวณแคลอรี
+            </button>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <div id="toast" class="fixed top-16 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+      <span id="toast-msg">บันทึกสำเร็จ</span>
+    </div>
+
+    <nav class="fixed bottom-0 w-full max-w-md bg-white border-t border-gray-100 px-2 py-2 flex justify-around items-center z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+      <button onclick="switchTab('home')" data-tab="home" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-emerald-600">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px] font-semibold mt-1">หน้าแรก</span>
+      </button>
+
+      <button onclick="switchTab('recipes')" data-tab="recipes" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-gray-400 hover:text-emerald-600">
+        <i data-lucide="utensils" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">เมนูสุขภาพ</span>
+      </button>
+
+      <!-- Center Prominent Scan Button -->
+      <button onclick="switchTab('scan')" data-tab="scan" class="nav-btn flex flex-col items-center justify-center -mt-6">
+        <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-lg shadow-emerald-600/30 border-4 border-[#F8FAF8] active:scale-95 transition">
+          <i data-lucide="scan-line" class="w-6 h-6"></i>
+        </div>
+        <span class="text-[10px] font-semibold text-gray-600 mt-1">สแกนอาหาร</span>
+      </button>
+
+      <button onclick="switchTab('planner')" data-tab="planner" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-gray-400 hover:text-emerald-600">
+        <i data-lucide="calendar-check" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">ตารางมื้อ</span>
+      </button>
+
+      <button onclick="switchTab('profile')" data-tab="profile" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-gray-400 hover:text-emerald-600">
+        <i data-lucide="user" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">โปรไฟล์</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

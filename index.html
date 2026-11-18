@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>หน้าแรก | HealthyBite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="home" class="flex justify-center min-h-screen bg-gray-100 text-gray-800">
+
+  <div class="w-full max-w-md bg-[#F8FAF8] min-h-screen shadow-2xl relative flex flex-col overflow-x-hidden pb-24">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-30 px-5 py-3.5 flex items-center justify-between border-b border-gray-100">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm">
+          <i data-lucide="leaf" class="w-5 h-5"></i>
+        </div>
+        <span class="font-bold text-lg text-gray-900 tracking-tight">Healthy<span class="text-emerald-600">Bite</span></span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <span class="text-xs font-medium bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full border border-emerald-100">
+          เป้าหมาย: <span id="header-target">1,800</span> kcal
+        </span>
+        <button onclick="switchTab('profile')" class="w-8 h-8 rounded-full overflow-hidden border border-emerald-200 shrink-0">
+          <img id="header-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Avatar" class="w-full h-full object-cover">
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 px-5 pt-4">
+      <section id="page-home" class="page-section fade-in space-y-6">
+        <!-- Greeting & Daily Summary Card -->
+        <div class="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-3xl p-5 text-white shadow-lg shadow-emerald-600/20">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-emerald-100 text-xs">สวัสดีคุณ <span id="home-user-name" class="font-semibold">วี่</span> 👋</p>
+              <h1 class="text-xl font-bold mt-0.5">สรุปแคลอรีวันนี้</h1>
+              <p class="text-emerald-100 text-[11px] mt-1"><i data-lucide="calendar-days" class="w-3 h-3 inline-block align-[-2px]"></i> <span id="today-date"></span></p>
+            </div>
+            <span class="bg-white/20 backdrop-blur-sm text-xs px-2.5 py-1 rounded-full">
+              เหลือ <span id="cal-remaining" class="font-bold">1,070</span> kcal
+            </span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="mt-4">
+            <div class="flex justify-between text-xs mb-1.5">
+              <span>ทานไปแล้ว <strong id="cal-consumed" class="text-base">730</strong> kcal</span>
+              <span class="text-emerald-100">เป้าหมาย <span id="cal-goal-display">1,800</span> kcal</span>
+            </div>
+            <div class="w-full bg-black/20 h-2.5 rounded-full overflow-hidden">
+              <div id="cal-progress-bar" class="bg-orange-400 h-full rounded-full transition-all duration-500" style="width: 40%;"></div>
+            </div>
+          </div>
+
+          <!-- Macros Mini Summary -->
+          <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/15 text-center text-xs">
+            <div class="bg-white/10 rounded-xl py-2">
+              <span class="text-emerald-100 block text-[11px]">โปรตีน</span>
+              <span class="font-bold text-sm"><span id="macro-p">67</span>g</span>
+            </div>
+            <div class="bg-white/10 rounded-xl py-2">
+              <span class="text-emerald-100 block text-[11px]">คาร์บ</span>
+              <span class="font-bold text-sm"><span id="macro-c">50</span>g</span>
+            </div>
+            <div class="bg-white/10 rounded-xl py-2">
+              <span class="text-emerald-100 block text-[11px]">ไขมัน</span>
+              <span class="font-bold text-sm"><span id="macro-f">24</span>g</span>
+            </div>
+          </div>
+          <button onclick="switchTab('planner')" class="mt-3 text-xs font-semibold text-emerald-50 hover:text-white transition">
+            ดูประวัติอาหารและเป้าหมายแคลอรี →
+          </button>
+        </div>
+
+        <!-- Daily Water Tracker -->
+        <div class="bg-gradient-to-br from-sky-500 to-blue-600 rounded-3xl p-5 text-white shadow-lg shadow-sky-500/20">
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="font-bold text-base flex items-center gap-1.5">
+                <i data-lucide="droplets" class="w-5 h-5"></i> บันทึกการดื่มน้ำ
+              </h2>
+              <p class="text-xs text-sky-100 mt-0.5">เป้าหมาย 8 แก้ว (ประมาณ 2,000 ml) ต่อวัน</p>
+            </div>
+            <div class="text-right">
+              <span id="water-glasses" class="text-2xl font-bold">5</span>
+              <span class="text-xs text-sky-100">/ 8 แก้ว</span>
+            </div>
+          </div>
+
+          <div id="water-grid" class="grid grid-cols-8 gap-1.5 my-4"></div>
+
+          <div class="flex gap-2">
+            <button onclick="updateWater(-1)" class="flex-1 bg-white/20 hover:bg-white/30 py-2 rounded-xl text-xs font-medium transition">- ลด 1 แก้ว</button>
+            <button onclick="updateWater(1)" class="flex-1 bg-white text-blue-600 hover:bg-blue-50 py-2 rounded-xl text-xs font-bold transition">+ ดื่มน้ำ 1 แก้ว</button>
+          </div>
+        </div>
+
+        <!-- Quick Scan Banner -->
+        <div onclick="switchTab('scan')" class="bg-orange-50 border border-orange-200/80 rounded-2xl p-4 flex items-center justify-between cursor-pointer active:scale-98 transition">
+          <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center shadow-sm shrink-0">
+              <i data-lucide="camera" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-900 text-sm">ไม่แน่ใจว่ามื้อนี้อ้วนไหม?</h3>
+              <p class="text-xs text-gray-600 mt-0.5">ดูข้อมูลโภชนาการและคำแนะนำก่อนเลือกทาน</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="w-5 h-5 text-orange-500"></i>
+        </div>
+
+        <!-- Goal Categories -->
+        <div>
+          <div class="flex justify-between items-center mb-3">
+            <h2 class="font-bold text-gray-900 text-base">เลือกตามเป้าหมาย</h2>
+          </div>
+          <div class="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+            <button onclick="filterFromHome('ทั้งหมด')" class="shrink-0 bg-white border border-gray-100 shadow-sm px-4 py-2.5 rounded-2xl flex items-center gap-2 text-xs font-medium hover:border-emerald-500 transition">
+              <span>🥗</span> ทั้งหมด
+            </button>
+            <button onclick="filterFromHome('ลดน้ำหนัก')" class="shrink-0 bg-white border border-gray-100 shadow-sm px-4 py-2.5 rounded-2xl flex items-center gap-2 text-xs font-medium hover:border-emerald-500 transition">
+              <span>🔥</span> ลดน้ำหนัก
+            </button>
+            <button onclick="filterFromHome('โปรตีนสูง')" class="shrink-0 bg-white border border-gray-100 shadow-sm px-4 py-2.5 rounded-2xl flex items-center gap-2 text-xs font-medium hover:border-emerald-500 transition">
+              <span>💪</span> โปรตีนสูง
+            </button>
+            <button onclick="filterFromHome('คีโต')" class="shrink-0 bg-white border border-gray-100 shadow-sm px-4 py-2.5 rounded-2xl flex items-center gap-2 text-xs font-medium hover:border-emerald-500 transition">
+              <span>🥑</span> คีโต / โลว์คาร์บ
+            </button>
+          </div>
+        </div>
+
+        <!-- Recommended Recipes -->
+        <div>
+          <div class="flex justify-between items-center mb-3">
+            <h2 class="font-bold text-gray-900 text-base">เมนูแนะนำสำหรับคุณ</h2>
+            <button onclick="switchTab('recipes')" class="text-xs font-semibold text-emerald-600">ดูทั้งหมด →</button>
+          </div>
+          <div id="home-featured-list" class="space-y-3"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="fixed top-16 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+      <span id="toast-msg">บันทึกสำเร็จ</span>
+    </div>
+
+    <nav class="fixed bottom-0 w-full max-w-md bg-white border-t border-gray-100 px-2 py-2 flex justify-around items-center z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+      <button onclick="switchTab('home')" data-tab="home" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-emerald-600">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px] font-semibold mt-1">หน้าแรก</span>
+      </button>
+
+      <button onclick="switchTab('recipes')" data-tab="recipes" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-gray-400 hover:text-emerald-600">
+        <i data-lucide="utensils" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">เมนูสุขภาพ</span>
+      </button>
+
+      <!-- Center Prominent Scan Button -->
+      <button onclick="switchTab('scan')" data-tab="scan" class="nav-btn flex flex-col items-center justify-center -mt-6">
+        <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-lg shadow-emerald-600/30 border-4 border-[#F8FAF8] active:scale-95 transition">
+          <i data-lucide="scan-line" class="w-6 h-6"></i>
+        </div>
+        <span class="text-[10px] font-semibold text-gray-600 mt-1">สแกนอาหาร</span>
+      </button>
+
+      <button onclick="switchTab('planner')" data-tab="planner" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-gray-400 hover:text-emerald-600">
+        <i data-lucide="calendar-check" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">ตารางมื้อ</span>
+      </button>
+
+      <button onclick="switchTab('profile')" data-tab="profile" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-gray-400 hover:text-emerald-600">
+        <i data-lucide="user" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">โปรไฟล์</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

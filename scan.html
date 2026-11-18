@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ประเมินอาหาร | HealthyBite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="scan" class="flex justify-center min-h-screen bg-gray-100 text-gray-800">
+
+  <div class="w-full max-w-md bg-[#F8FAF8] min-h-screen shadow-2xl relative flex flex-col overflow-x-hidden pb-24">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-30 px-5 py-3.5 flex items-center justify-between border-b border-gray-100">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm">
+          <i data-lucide="leaf" class="w-5 h-5"></i>
+        </div>
+        <span class="font-bold text-lg text-gray-900 tracking-tight">Healthy<span class="text-emerald-600">Bite</span></span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <span class="text-xs font-medium bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full border border-emerald-100">
+          เป้าหมาย: <span id="header-target">1,800</span> kcal
+        </span>
+        <button onclick="switchTab('profile')" class="w-8 h-8 rounded-full overflow-hidden border border-emerald-200 shrink-0">
+          <img id="header-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Avatar" class="w-full h-full object-cover">
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 px-5 pt-4">
+      <section id="page-scan" class="page-section fade-in space-y-5">
+        <div>
+          <h1 class="text-xl font-bold text-gray-900">สแกนวิเคราะห์อาหาร</h1>
+          <p class="text-xs text-gray-500">ทดลองดูตัวอย่างแคลอรี สารอาหาร และคำเตือนของอาหารแต่ละชนิด</p>
+        </div>
+
+        <!-- Upload / Camera Box -->
+        <div class="bg-white border-2 border-dashed border-emerald-300 rounded-3xl p-6 text-center relative overflow-hidden">
+          <input type="file" id="food-image-input" accept="image/*" capture="environment" class="hidden" onchange="handleImageUpload(event)">
+          
+          <div id="upload-placeholder" class="space-y-3">
+            <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+              <i data-lucide="camera" class="w-8 h-8"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-sm text-gray-800">เลือกรูปอาหารเพื่อดูตัวอย่างผลประเมิน</p>
+              <p class="text-xs text-gray-400 mt-1">รองรับไฟล์ JPG, PNG</p>
+            </div>
+            <div class="flex justify-center gap-2 pt-2">
+              <button onclick="document.getElementById('food-image-input').click()" class="bg-emerald-600 text-white text-xs font-medium px-5 py-2.5 rounded-full shadow-sm hover:bg-emerald-700 transition flex items-center gap-1.5">
+                <i data-lucide="upload" class="w-4 h-4"></i> เลือกรูปภาพ / ถ่ายรูป
+              </button>
+            </div>
+          </div>
+
+          <!-- Image Preview -->
+          <div id="image-preview-box" class="hidden space-y-3">
+            <img id="preview-img" src="" alt="Food Preview" class="w-full h-52 object-cover rounded-2xl shadow-sm">
+            <button onclick="document.getElementById('food-image-input').click()" class="text-xs text-emerald-600 font-medium underline">เปลี่ยนรูปภาพใหม่</button>
+          </div>
+        </div>
+
+        <!-- Quick Demo Presets -->
+        <div>
+          <div class="mb-3 rounded-xl bg-amber-50 border border-amber-200 p-3 text-[11px] leading-relaxed text-amber-800">
+            หมายเหตุ: หน้านี้เป็นตัวอย่างการประเมิน รูปที่อัปโหลดจะแสดงผลจากชุดข้อมูลสาธิต ไม่ใช่การวิเคราะห์ภาพจริง
+          </div>
+          <p class="text-xs font-semibold text-gray-500 mb-2">เลือกตัวอย่างอาหารเพื่อดูผลประเมิน:</p>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="simulateScan('healthy')" class="bg-white border border-gray-200 p-2 rounded-xl text-center hover:border-emerald-500 transition">
+              <span class="text-xl block">🥗</span>
+              <span class="text-[11px] font-medium text-gray-700 mt-1 block">สลัดอกไก่</span>
+            </button>
+            <button onclick="simulateScan('unhealthy_fried')" class="bg-white border border-gray-200 p-2 rounded-xl text-center hover:border-red-400 transition">
+              <span class="text-xl block">🍗</span>
+              <span class="text-[11px] font-medium text-gray-700 mt-1 block">ไก่ทอด+เฟรนช์ฟรายส์</span>
+            </button>
+            <button onclick="simulateScan('unhealthy_sweet')" class="bg-white border border-gray-200 p-2 rounded-xl text-center hover:border-red-400 transition">
+              <span class="text-xl block">🧋</span>
+              <span class="text-[11px] font-medium text-gray-700 mt-1 block">ชานมไข่มุก</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="scan-loading" class="hidden bg-white rounded-3xl p-6 text-center shadow-sm border border-gray-100">
+          <div class="w-10 h-10 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto"></div>
+          <p class="text-sm font-semibold text-gray-800 mt-3">กำลังวิเคราะห์ส่วนประกอบอาหาร...</p>
+          <p class="text-xs text-gray-400 mt-1">ประเมินแคลอรี โซเดียม น้ำตาล และไขมัน</p>
+        </div>
+
+        <!-- Scan Result Card -->
+        <div id="scan-result-card" class="hidden bg-white rounded-3xl p-5 shadow-md border border-gray-100 space-y-4 fade-in">
+          <div id="health-alert-box" class="p-3.5 rounded-2xl flex items-start gap-3">
+            <div id="health-alert-icon" class="mt-0.5 shrink-0"></div>
+            <div>
+              <h4 id="health-alert-title" class="font-bold text-sm"></h4>
+              <p id="health-alert-desc" class="text-xs mt-1 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+            <div>
+              <span class="text-[11px] text-gray-400">ผลการตรวจจับอาหาร</span>
+              <h3 id="scan-food-name" class="font-bold text-lg text-gray-900"></h3>
+            </div>
+            <div class="text-right">
+              <span id="scan-food-cal" class="font-bold text-2xl text-emerald-600"></span>
+              <span class="text-xs text-gray-500 block">kcal</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="bg-gray-50 p-2.5 rounded-xl">
+              <span class="text-[11px] text-gray-500 block">โปรตีน</span>
+              <span id="scan-p" class="font-bold text-sm text-gray-800"></span>
+            </div>
+            <div class="bg-gray-50 p-2.5 rounded-xl">
+              <span class="text-[11px] text-gray-500 block">คาร์โบไฮเดรต</span>
+              <span id="scan-c" class="font-bold text-sm text-gray-800"></span>
+            </div>
+            <div class="bg-gray-50 p-2.5 rounded-xl">
+              <span class="text-[11px] text-gray-500 block">ไขมัน</span>
+              <span id="scan-f" class="font-bold text-sm text-gray-800"></span>
+            </div>
+            <div class="bg-gray-50 p-2.5 rounded-xl">
+              <span class="text-[11px] text-gray-500 block">น้ำตาล</span>
+              <span id="scan-sugar" class="font-bold text-sm"></span>
+            </div>
+            <div class="bg-gray-50 p-2.5 rounded-xl">
+              <span class="text-[11px] text-gray-500 block">โซเดียม</span>
+              <span id="scan-sodium" class="font-bold text-sm"></span>
+            </div>
+            <div class="bg-gray-50 p-2.5 rounded-xl">
+              <span class="text-[11px] text-gray-500 block">คะแนนสุขภาพ</span>
+              <span id="scan-score" class="font-bold text-sm"></span>
+            </div>
+          </div>
+
+          <button id="btn-add-scanned" class="w-full bg-gray-900 text-white font-medium text-sm py-3 rounded-2xl hover:bg-gray-800 transition">
+            + บันทึกลงรายการมื้ออาหารวันนี้
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="fixed top-16 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+      <span id="toast-msg">บันทึกสำเร็จ</span>
+    </div>
+
+    <nav class="fixed bottom-0 w-full max-w-md bg-white border-t border-gray-100 px-2 py-2 flex justify-around items-center z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+      <button onclick="switchTab('home')" data-tab="home" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-emerald-600">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px] font-semibold mt-1">หน้าแรก</span>
+      </button>
+
+      <button onclick="switchTab('recipes')" data-tab="recipes" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-gray-400 hover:text-emerald-600">
+        <i data-lucide="utensils" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">เมนูสุขภาพ</span>
+      </button>
+
+      <!-- Center Prominent Scan Button -->
+      <button onclick="switchTab('scan')" data-tab="scan" class="nav-btn flex flex-col items-center justify-center -mt-6">
+        <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-lg shadow-emerald-600/30 border-4 border-[#F8FAF8] active:scale-95 transition">
+          <i data-lucide="scan-line" class="w-6 h-6"></i>
+        </div>
+        <span class="text-[10px] font-semibold text-gray-600 mt-1">สแกนอาหาร</span>
+      </button>
+
+      <button onclick="switchTab('planner')" data-tab="planner" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-gray-400 hover:text-emerald-600">
+        <i data-lucide="calendar-check" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">ตารางมื้อ</span>
+      </button>
+
+      <button onclick="switchTab('profile')" data-tab="profile" class="nav-btn flex flex-col items-center justify-center w-16 py-1 text-gray-400 hover:text-emerald-600">
+        <i data-lucide="user" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">โปรไฟล์</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
